@@ -1,4 +1,4 @@
-package cl.duoc.rinconsur.ui.theme
+package cl.duoc.rinconsur.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -19,12 +19,10 @@ import cl.duoc.rinconsur.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreenCompacta() {
+    Box(modifier = Modifier.fillMaxSize()) {
 
-    // El Box principal abarca toda la pantalla de la app
-    Box(modifier = Modifier.fillMaxSize()){
-
-        // 1. Imagen de fondo para toda la pantalla
+        // 1. Imagen de fondo
         Image(
             painter = painterResource(id = R.drawable.fondo),
             contentDescription = null,
@@ -32,7 +30,7 @@ fun HomeScreen() {
             contentScale = ContentScale.Crop
         )
 
-        // 2. Scaffold con fondo transparente para mostrar lo que está detrás
+        // 2. Scaffold transparente
         Scaffold(
             containerColor = Color.Transparent,
             topBar = {
@@ -41,18 +39,17 @@ fun HomeScreen() {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("Bien Venido a Rincon Sur!") }
+                    title = { Text("¡Bienvenido a Rincón Sur!") }
                 )
             }
         ) { innerPadding ->
-            // Colocamos el contenedor de la Card adaptándose al padding del Scaffold
             Card(
                 modifier = Modifier
                     .padding(innerPadding)
                     .padding(16.dp)
                     .fillMaxWidth(),
                 colors = CardDefaults.cardColors(
-                    containerColor = Color.White.copy(alpha = 0.85f) // Blanco con 85% de opacidad
+                    containerColor = Color.White.copy(alpha = 0.85f)
                 )
             ) {
                 Column(
@@ -62,17 +59,14 @@ fun HomeScreen() {
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Control dinámico del tamaño de la fuente para que el texto lo tengamos en una linea
-                    var fontSize by remember { mutableStateOf(24.sp)/* Tamaño de fuente inicial */
-                    }
+                    var fontSize by remember { mutableStateOf(24.sp) }
 
                     Text(
-                        text = "Tienda Departamental Rincon Sur",
-                        style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize), // Aplicamos el fontSize dinámico sobre el estilo base
+                        text = "Tienda Departamental Rincón Sur",
+                        style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize),
                         maxLines = 1,
                         softWrap = false,
                         onTextLayout = { textLayoutResult ->
-                            // Si el texto excede el ancho disponible, reduce el tamaño en un 10%
                             if (textLayoutResult.didOverflowWidth) {
                                 fontSize = (fontSize.value * 0.9f).sp
                             }
@@ -84,43 +78,41 @@ fun HomeScreen() {
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    // Matriz o lista de botones de las 4 entradas
+                    // Matriz de botones 2x2
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        // Fila 1: Entrada 1 y Entrada 2
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { /* TODO: Navegar o abrir Entrada 1 */ },
+                                onClick = { /* TODO */ },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 1")
                             }
                             ElevatedButton(
-                                onClick = { /* TODO: Navegar o abrir Entrada 2 */ },
+                                onClick = { /* TODO */ },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 2")
                             }
                         }
 
-                        // Fila 2: Entrada 3 y Entrada 4
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { /* TODO: Navegar o abrir Entrada 3 */ },
+                                onClick = { /* TODO */ },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 3")
                             }
                             ElevatedButton(
-                                onClick = { /* TODO: Navegar o abrir Entrada 4 */ },
+                                onClick = { /* TODO */ },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 4")
@@ -128,13 +120,14 @@ fun HomeScreen() {
                         }
                     }
 
+                    // Logo
                     Image(
                         painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "ififfo",
+                        contentDescription = "Logo Rincón Sur",
                         modifier = Modifier
                             .size(180.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .alpha(0.1f),
+                            .alpha(0.2f),
                         contentScale = ContentScale.Fit
                     )
                 }
@@ -143,8 +136,8 @@ fun HomeScreen() {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(name = "Compact", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
-fun HomeScreenPreview() {
-    HomeScreen()
+fun HomeScreenCompactaPreview() {
+    HomeScreenCompacta()
 }
