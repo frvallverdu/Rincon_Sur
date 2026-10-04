@@ -2,7 +2,6 @@
 
 **Asignatura:** Desarrollo de Aplicaciones Móviles (DSY1105)  
 **Organización:** Tienda Departamental Rincón Sur  
-**Sede / CITT:** CITT Plaza Norte — Juan José Pierattini Vega  
 **Fecha de Entrega:** 28-08-2026  
 **Repositorio:** https://github.com/frvallverdu/Rincon_Sur.git  
 
