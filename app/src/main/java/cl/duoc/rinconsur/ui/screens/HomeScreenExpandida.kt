@@ -7,11 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cl.duoc.rinconsur.R
@@ -37,7 +37,7 @@ fun HomeScreenExpandida() {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bienvenido a Rincón Sur! (Pantalla Expandida)") }
+                    title = { Text("¡Bienvenido a Rincón Sur!") }
                 )
             }
         ) { innerPadding ->
@@ -62,76 +62,84 @@ fun HomeScreenExpandida() {
                     Column(
                         modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(20.dp)
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.logo),
                             contentDescription = "Logo Rincón Sur",
                             modifier = Modifier
-                                .size(240.dp)
+                                .size(200.dp)
                                 .clip(RoundedCornerShape(16.dp)),
                             contentScale = ContentScale.Fit
                         )
 
                         Text(
-                            text = "Tienda Departamental Rincón Sur",
-                            style = MaterialTheme.typography.displaySmall
+                            text = "Tienda Departamental\nRincón Sur",
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
 
                     // Columna Derecha: Selección de Entradas
                     Column(
                         modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(20.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = "Seleccione la Entrada",
-                            style = MaterialTheme.typography.headlineMedium
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center
                         )
 
                         // Botones en cuadrícula 2x2
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            ElevatedButton(
-                                onClick = { },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp)
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Entrada 1")
+                                ElevatedButton(
+                                    onClick = { },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                ) {
+                                    Text("Entrada 1")
+                                }
+                                ElevatedButton(
+                                    onClick = { },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                ) {
+                                    Text("Entrada 2")
+                                }
                             }
-                            ElevatedButton(
-                                onClick = { },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp)
-                            ) {
-                                Text("Entrada 2")
-                            }
-                        }
 
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            ElevatedButton(
-                                onClick = { },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp)
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text("Entrada 3")
-                            }
-                            ElevatedButton(
-                                onClick = { },
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp)
-                            ) {
-                                Text("Entrada 4")
+                                ElevatedButton(
+                                    onClick = { },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                ) {
+                                    Text("Entrada 3")
+                                }
+                                ElevatedButton(
+                                    onClick = { },
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .height(56.dp)
+                                ) {
+                                    Text("Entrada 4")
+                                }
                             }
                         }
                     }
@@ -141,7 +149,6 @@ fun HomeScreenExpandida() {
     }
 }
 
-// Preview configurado con un ancho de 1200dp (Rango de Expanded es >= 840dp)
 @Preview(name = "Expanded Screen", widthDp = 1200, heightDp = 800, showBackground = true)
 @Composable
 fun HomeScreenExpandidaPreview() {
