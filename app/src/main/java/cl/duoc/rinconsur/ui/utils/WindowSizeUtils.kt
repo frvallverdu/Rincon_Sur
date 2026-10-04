@@ -10,5 +10,5 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun obtenerWindowSizeClass(): WindowSizeClass{
-    return calculateWindowSizeClass(LocalActivity.current as android.app.Activity)
+    return calculateWindowSizeClass(LocalActivity.current as android.app.Activity) // Es solo para saber el tamaño de la pantalla
 }
