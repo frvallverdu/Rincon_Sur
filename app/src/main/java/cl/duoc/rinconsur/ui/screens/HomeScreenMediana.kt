@@ -14,11 +14,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.duoc.rinconsur.R
+import cl.duoc.rinconsur.navigation.Screen
+import cl.duoc.rinconsur.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenMediana() {
+fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Imagen de fondo
@@ -37,7 +40,7 @@ fun HomeScreenMediana() {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bien Venido a Rincón Sur!") }
+                    title = { Text("¡Bien Venido a Rincon Sur!") }
                 )
             }
         ) { innerPadding ->
@@ -74,25 +77,25 @@ fun HomeScreenMediana() {
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         ElevatedButton(
-                            onClick = { },
+                            onClick = { viewModel.navigateTo(Screen.Entrada(1)) },
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Entrada 1")
                         }
                         ElevatedButton(
-                            onClick = { },
+                            onClick = { viewModel.navigateTo(Screen.Entrada(2)) },
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Entrada 2")
                         }
                         ElevatedButton(
-                            onClick = { },
+                            onClick = { viewModel.navigateTo(Screen.Entrada(3)) },
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Entrada 3")
                         }
                         ElevatedButton(
-                            onClick = { },
+                            onClick = { viewModel.navigateTo(Screen.Entrada(4)) },
                             modifier = Modifier.weight(1f)
                         ) {
                             Text("Entrada 4")

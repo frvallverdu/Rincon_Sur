@@ -16,10 +16,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cl.duoc.rinconsur.R
+import cl.duoc.rinconsur.viewmodel.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cl.duoc.rinconsur.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenCompacta() {
+fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
+
     Box(modifier = Modifier.fillMaxSize()) {
 
         // 1. Imagen de fondo
@@ -39,7 +43,7 @@ fun HomeScreenCompacta() {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bienvenido a Rincón Sur!") }
+                    title = { Text("¡Bien Venido a Rincon Sur!") }
                 )
             }
         ) { innerPadding ->
@@ -62,7 +66,7 @@ fun HomeScreenCompacta() {
                     var fontSize by remember { mutableStateOf(24.sp) }
 
                     Text(
-                        text = "Tienda Departamental Rincón Sur",
+                        text = "Tienda Departamental Rincon Sur",
                         style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize),
                         maxLines = 1,
                         softWrap = false,
@@ -78,7 +82,6 @@ fun HomeScreenCompacta() {
                         style = MaterialTheme.typography.titleMedium
                     )
 
-                    // Matriz de botones 2x2
                     Column(
                         verticalArrangement = Arrangement.spacedBy(8.dp),
                         modifier = Modifier.fillMaxWidth()
@@ -88,13 +91,13 @@ fun HomeScreenCompacta() {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { /* TODO */ },
+                                onClick = { viewModel.navigateTo(Screen.Entrada(1)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 1")
                             }
                             ElevatedButton(
-                                onClick = { /* TODO */ },
+                                onClick = { viewModel.navigateTo(Screen.Entrada(2)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 2")
@@ -106,13 +109,13 @@ fun HomeScreenCompacta() {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { /* TODO */ },
+                                onClick = { viewModel.navigateTo(Screen.Entrada(3)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 3")
                             }
                             ElevatedButton(
-                                onClick = { /* TODO */ },
+                                onClick = { viewModel.navigateTo(Screen.Entrada(4)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 4")
@@ -123,7 +126,7 @@ fun HomeScreenCompacta() {
                     // Logo
                     Image(
                         painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Logo Rincón Sur",
+                        contentDescription = "Logo Rincon Sur",
                         modifier = Modifier
                             .size(180.dp)
                             .clip(RoundedCornerShape(16.dp))

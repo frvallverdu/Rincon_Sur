@@ -1,19 +1,21 @@
 package cl.duoc.rinconsur.ui.screens
 
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.duoc.rinconsur.ui.utils.obtenerWindowSizeClass
+import cl.duoc.rinconsur.viewmodel.MainViewModel
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 
 @Composable
-fun HomeScreen() {
-    // Obtenemos la clase de tamaño actual
+fun HomeScreen(
+    viewModel: MainViewModel = viewModel()
+) {
     val windowSizeClass = obtenerWindowSizeClass()
 
-    // Seleccionamos qué pantalla renderizar
     when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> HomeScreenCompacta()
-        WindowWidthSizeClass.Medium -> HomeScreenMediana()
-        WindowWidthSizeClass.Expanded -> HomeScreenExpandida()
-        else -> HomeScreenCompacta() // Por defecto
+        WindowWidthSizeClass.Compact -> HomeScreenCompacta(viewModel = viewModel)
+        WindowWidthSizeClass.Medium -> HomeScreenMediana(viewModel = viewModel)
+        WindowWidthSizeClass.Expanded -> HomeScreenExpandida(viewModel = viewModel)
+        else -> HomeScreenCompacta(viewModel = viewModel)
     }
 }

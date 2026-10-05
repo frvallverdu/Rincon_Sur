@@ -14,11 +14,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.duoc.rinconsur.R
+import cl.duoc.rinconsur.navigation.Screen
+import cl.duoc.rinconsur.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenExpandida() {
+fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Imagen de fondo
@@ -37,7 +40,7 @@ fun HomeScreenExpandida() {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bienvenido a Rincón Sur!") }
+                    title = { Text("¡Bien Venido a Rincon Sur!") }
                 )
             }
         ) { innerPadding ->
@@ -66,7 +69,7 @@ fun HomeScreenExpandida() {
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.logo),
-                            contentDescription = "Logo Rincón Sur",
+                            contentDescription = "Logo Rincon Sur",
                             modifier = Modifier
                                 .size(200.dp)
                                 .clip(RoundedCornerShape(16.dp)),
@@ -74,7 +77,7 @@ fun HomeScreenExpandida() {
                         )
 
                         Text(
-                            text = "Tienda Departamental\nRincón Sur",
+                            text = "Tienda Departamental\nRincon Sur",
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -93,7 +96,6 @@ fun HomeScreenExpandida() {
                             textAlign = TextAlign.Center
                         )
 
-                        // Botones en cuadrícula 2x2
                         Column(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             modifier = Modifier.fillMaxWidth()
@@ -103,7 +105,7 @@ fun HomeScreenExpandida() {
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 ElevatedButton(
-                                    onClick = { },
+                                    onClick = { viewModel.navigateTo(Screen.Entrada(1)) },
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(56.dp)
@@ -111,7 +113,7 @@ fun HomeScreenExpandida() {
                                     Text("Entrada 1")
                                 }
                                 ElevatedButton(
-                                    onClick = { },
+                                    onClick = { viewModel.navigateTo(Screen.Entrada(2)) },
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(56.dp)
@@ -125,7 +127,7 @@ fun HomeScreenExpandida() {
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 ElevatedButton(
-                                    onClick = { },
+                                    onClick = { viewModel.navigateTo(Screen.Entrada(3)) },
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(56.dp)
@@ -133,7 +135,7 @@ fun HomeScreenExpandida() {
                                     Text("Entrada 3")
                                 }
                                 ElevatedButton(
-                                    onClick = { },
+                                    onClick = { viewModel.navigateTo(Screen.Entrada(4)) },
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(56.dp)
