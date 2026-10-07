@@ -19,6 +19,8 @@ class IngresoRepository {
             )
         }
 
+        // mapaPuerta[tipoFlujo] usa el String ("Cliente" o "Transeúnte") como llave para encontrar
+        // la lista correcta y con '?.add' agrega el nuevo registro de forma segura.
         mapaPuerta[tipoFlujo]?.add(nuevoRegistro)
     }
 }

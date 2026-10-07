@@ -7,9 +7,15 @@ sealed class Screen(val route: String) {
     data object Resultados : Screen("resultados")
 
     data class Entrada(val numeroEntrada: Int) : Screen(ROUTE) {
+        
+        /**
+         * Construye la URL final reemplazando el parámetro por el valor real.
+         * Ejemplo: Screen.Entrada(2).buildRoute() produce "entrada/2"
+         */
         fun buildRoute(): String = "entrada/$numeroEntrada"
 
         companion object {
+            // Patrón de la ruta registrado en el NavHost para recibir el argumento entero
             const val ROUTE = "entrada/{numeroEntrada}"
         }
     }
