@@ -3,7 +3,10 @@ package cl.duoc.rinconsur.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +26,7 @@ import cl.duoc.rinconsur.navigation.Screen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
+    var menuExpanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -43,7 +47,44 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bien Venido a Rincon Sur!") }
+                    title = { Text("¡Bienvenido a Rincón Sur!") },
+                    actions = {
+                        IconButton(onClick = { menuExpanded = true }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = "Menú"
+                            )
+                        }
+
+                        DropdownMenu(
+                            expanded = menuExpanded,
+                            onDismissRequest = { menuExpanded = false }
+                        ) {
+                            // Opción para ver Resultados
+                            DropdownMenuItem(
+                                text = { Text("Ver Resultados / Estadísticas") },
+                                onClick = {
+                                    menuExpanded = false
+                                    viewModel.navigateTo(Screen.Resultados)
+                                }
+                            )
+
+                            HorizontalDivider(
+                                Modifier,
+                                DividerDefaults.Thickness,
+                                DividerDefaults.color
+                            )
+
+                            // Opción Salir
+                            DropdownMenuItem(
+                                text = { Text("Salir") },
+                                onClick = {
+                                    menuExpanded = false
+                                    android.os.Process.killProcess(android.os.Process.myPid())
+                                }
+                            )
+                        }
+                    }
                 )
             }
         ) { innerPadding ->
@@ -66,7 +107,7 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                     var fontSize by remember { mutableStateOf(24.sp) }
 
                     Text(
-                        text = "Tienda Departamental Rincon Sur",
+                        text = "¡Bien Venido!",
                         style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize),
                         maxLines = 1,
                         softWrap = false,
@@ -123,14 +164,24 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    // Botón para ir directo a Resultados
+                    OutlinedButton(
+                        onClick = { viewModel.navigateTo(Screen.Resultados) },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Ver Resultados y Estadísticas por Puerta")
+                    }
+
                     // Logo
                     Image(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = "Logo Rincon Sur",
                         modifier = Modifier
-                            .size(180.dp)
+                            .size(150.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .alpha(0.2f),
+                            .alpha(0.1f),
                         contentScale = ContentScale.Fit
                     )
                 }

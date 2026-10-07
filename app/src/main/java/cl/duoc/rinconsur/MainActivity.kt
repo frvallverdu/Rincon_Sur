@@ -20,6 +20,7 @@ import cl.duoc.rinconsur.navigation.NavigationEvent
 import cl.duoc.rinconsur.navigation.Screen
 import cl.duoc.rinconsur.ui.screens.FormularioEntradaScreen
 import cl.duoc.rinconsur.ui.screens.HomeScreen
+import cl.duoc.rinconsur.ui.screens.ResultadosScreen
 import cl.duoc.rinconsur.viewmodel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -41,12 +42,14 @@ class MainActivity : ComponentActivity() {
                             is NavigationEvent.NavigateTo -> {
                                 val destinationRoute = when (val screen = event.route) {
                                     is Screen.Inicio -> screen.route
+                                    is Screen.Resultados -> screen.route
                                     is Screen.Entrada -> screen.buildRoute()
                                 }
                                 navController.navigate(destinationRoute) {
                                     event.popUpToRoute?.let { target ->
                                         val popRoute = when (target) {
                                             is Screen.Inicio -> target.route
+                                            is Screen.Resultados -> target.route
                                             is Screen.Entrada -> target.buildRoute()
                                         }
                                         popUpTo(popRoute) { inclusive = event.inclusive }
@@ -69,6 +72,11 @@ class MainActivity : ComponentActivity() {
                         // Ruta de inicio
                         composable(Screen.Inicio.route) {
                             HomeScreen(viewModel = mainViewModel)
+                        }
+
+                        // Ruta de resultados / estadísticas
+                        composable(Screen.Resultados.route) {
+                            ResultadosScreen(viewModel = mainViewModel)
                         }
 
                         // Ruta de entradas con argumento entero

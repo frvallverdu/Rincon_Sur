@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -40,7 +41,7 @@ fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bien Venido a Rincon Sur!") }
+                    title = { Text("Tienda Departamental Rincon Sur") }
                 )
             }
         ) { innerPadding ->
@@ -72,12 +73,13 @@ fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
                             contentDescription = "Logo Rincon Sur",
                             modifier = Modifier
                                 .size(200.dp)
-                                .clip(RoundedCornerShape(16.dp)),
+                                .clip(RoundedCornerShape(16.dp))
+                                .alpha(0.1f),
                             contentScale = ContentScale.Fit
                         )
 
                         Text(
-                            text = "Tienda Departamental\nRincon Sur",
+                            text = "¡Bien Venido!",
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()

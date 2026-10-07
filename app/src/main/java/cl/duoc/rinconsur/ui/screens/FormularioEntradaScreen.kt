@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cl.duoc.rinconsur.viewmodel.MainViewModel
@@ -17,19 +18,28 @@ fun FormularioEntradaScreen(
     numeroEntrada: Int,
     viewModel: MainViewModel = viewModel()
 ) {
-    var nombre by remember { mutableStateOf("") }
-    var rut by remember { mutableStateOf("") }
+    // Opciones según el caso de estudio de Rincón Sur
+    val tiposFlujo = listOf(
+        "Cliente",
+        "Transeúnte"
+    )
+    var flujoSeleccionado by remember { mutableStateOf(tiposFlujo[0]) }
+
+    // Rangos de edad solicitados: 18-30, 31-40, 41-60, Más de 60
+    val rangosEdad = listOf("18 - 30 años", "31 - 40 años", "41 - 60 años", "Más de 60 años")
+    var edadSeleccionada by remember { mutableStateOf(rangosEdad[0]) }
+
     var mensajeConfirmacion by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Entrada $numeroEntrada") },
+                title = { Text("Acceso / Puerta $numeroEntrada") },
                 navigationIcon = {
                     IconButton(onClick = { viewModel.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Volver al menú de entradas"
+                            contentDescription = "Volver"
                         )
                     }
                 }
@@ -41,43 +51,64 @@ fun FormularioEntradaScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Text(
-                text = "Registro de Ingreso - Entrada $numeroEntrada",
+                text = "Registro de Flujo - Puerta $numeroEntrada",
                 style = MaterialTheme.typography.titleMedium
             )
 
-            OutlinedTextField(
-                value = nombre,
-                onValueChange = { nombre = it },
-                label = { Text("Nombre Completo") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
+            // --- 1. TIPO DE FLUJO (Cliente vs Bypass) ---
+            Text("1. Propósito de ingreso:", style = MaterialTheme.typography.bodyLarge)
+            tiposFlujo.forEach { flujo ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    RadioButton(
+                        selected = (flujo == flujoSeleccionado),
+                        onClick = { flujoSeleccionado = flujo }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = flujo)
+                }
+            }
 
-            OutlinedTextField(
-                value = rut,
-                onValueChange = { rut = it },
-                label = { Text("RUT") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
+            Spacer(modifier = Modifier.height(4.dp))
 
+            // --- 2. SEGMENTACIÓN (Rango de Edad) ---
+            Text("2. Rango de Edad (Segmentación):", style = MaterialTheme.typography.bodyLarge)
+            rangosEdad.forEach { edad ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    RadioButton(
+                        selected = (edad == edadSeleccionada),
+                        onClick = { edadSeleccionada = edad }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = edad)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // --- BOTÓN REGISTRAR ---
             Button(
                 onClick = {
-                    if (nombre.isNotBlank() && rut.isNotBlank()) {
-                        mensajeConfirmacion = "¡Registrado con éxito en Entrada $numeroEntrada!"
-                        nombre = ""
-                        rut = ""
-                    } else {
-                        mensajeConfirmacion = "Por favor completa todos los campos."
-                    }
+                    // Guardamos en el diccionario del ViewModel
+                    viewModel.registrarIngreso(
+                        numeroPuerta = numeroEntrada,
+                        tipoFlujo = flujoSeleccionado,
+                        rangoEdad = edadSeleccionada
+                    )
+
+                    mensajeConfirmacion = "¡Registrado en Puerta $numeroEntrada con éxito!"
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Registrar Persona")
+                Text("Registrar Ingreso / Tránsito")
             }
 
             if (mensajeConfirmacion.isNotEmpty()) {
@@ -88,5 +119,15 @@ fun FormularioEntradaScreen(
                 )
             }
         }
+    }
+}
+
+@Preview(name = "Formulario Entrada 1", showBackground = true, widthDp = 360, heightDp = 800)
+@Composable
+fun FormularioEntradaScreenPreview() {
+    MaterialTheme {
+        FormularioEntradaScreen(
+            numeroEntrada = 1
+        )
     }
 }

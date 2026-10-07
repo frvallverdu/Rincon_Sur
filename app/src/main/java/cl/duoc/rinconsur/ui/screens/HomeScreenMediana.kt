@@ -40,7 +40,7 @@ fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         titleContentColor = MaterialTheme.colorScheme.primary
                     ),
-                    title = { Text("¡Bien Venido a Rincon Sur!") }
+                    title = { Text("Tienda Departamental Rincon Sur") }
                 )
             }
         ) { innerPadding ->
@@ -61,7 +61,7 @@ fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Tienda Departamental Rincón Sur",
+                        text = "¡Bien Venido!",
                         style = MaterialTheme.typography.headlineLarge // Texto más grande para Medium
                     )
 
@@ -109,7 +109,7 @@ fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
                         modifier = Modifier
                             .size(220.dp)
                             .clip(RoundedCornerShape(16.dp))
-                            .alpha(0.25f),
+                            .alpha(0.1f),
                         contentScale = ContentScale.Fit
                     )
                 }
