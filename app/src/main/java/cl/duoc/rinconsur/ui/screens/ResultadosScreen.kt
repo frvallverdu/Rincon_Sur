@@ -88,13 +88,20 @@ fun ResultadosScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                 )
                             }
+                            clientesList.lastOrNull()?.let { ultimo ->
+                                Text(
+                                    text = "Último registro: ${ultimo.fechaHora}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.outline
+                                )
+                            }
                         }
 
                         Spacer(modifier = Modifier.height(4.dp))
 
                         // Transeúntes / Bypass
                         Text(
-                            text = "Transeúnte: ${bypassList.size}",
+                            text = "Transeúntes: ${bypassList.size}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.error,
                         )
@@ -104,6 +111,13 @@ fun ResultadosScreen(
                                 Text(
                                     text = "   • $rango: $count personas",
                                     style = MaterialTheme.typography.bodySmall,
+                                )
+                            }
+                            bypassList.lastOrNull()?.let { ultimo ->
+                                Text(
+                                    text = "Último registro: ${ultimo.fechaHora}",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MaterialTheme.colorScheme.outline
                                 )
                             }
                         }
