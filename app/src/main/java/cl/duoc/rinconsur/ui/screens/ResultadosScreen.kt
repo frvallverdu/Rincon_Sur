@@ -88,6 +88,14 @@ fun ResultadosScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                 )
                             }
+                            val totalAcompanantesClientes =
+                                clientesList.sumOf { it.cantidadAcompanantes }
+
+                            Text(
+                                text = "Acompañantes: $totalAcompanantesClientes",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+
                             clientesList.lastOrNull()?.let { ultimo ->
                                 Text(
                                     text = "Último registro: ${ultimo.fechaHora}",
@@ -113,6 +121,13 @@ fun ResultadosScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                 )
                             }
+                            val totalAcompanantesTransito =
+                                bypassList.sumOf { it.cantidadAcompanantes }
+
+                            Text(
+                                text = "Acompañantes: $totalAcompanantesTransito",
+                                style = MaterialTheme.typography.bodySmall
+                            )
                             bypassList.lastOrNull()?.let { ultimo ->
                                 Text(
                                     text = "Último registro: ${ultimo.fechaHora}",

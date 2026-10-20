@@ -31,8 +31,19 @@ class MainViewModel(
     /**
      * Guarda un nuevo ingreso delegándolo al repositorio de datos.
      */
-    fun registrarIngreso(numeroPuerta: Int, tipoFlujo: String, rangoEdad: String) {
-        repository.registrarIngreso(numeroPuerta, tipoFlujo, rangoEdad)
+
+    fun registrarIngreso(
+        numeroPuerta: Int,
+        tipoFlujo: String,
+        rangoEdad: String,
+        cantidadAcompanantes: Int
+    ) {
+        repository.registrarIngreso(
+            numeroPuerta,
+            tipoFlujo,
+            rangoEdad,
+            cantidadAcompanantes
+        )
     }
 
     /**
