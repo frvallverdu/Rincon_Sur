@@ -25,6 +25,8 @@ fun FormularioEntradaScreen(
     )
     var flujoSeleccionado by remember { mutableStateOf(tiposFlujo[0]) }
 
+    var cantidadAcompanantes by remember { mutableIntStateOf(0) }
+
     // Rangos de edad solicitados: 18-30, 31-40, 41-60, Más de 60
     val rangosEdad = listOf("18 - 30 años", "31 - 40 años", "41 - 60 años", "Más de 60 años")
     var edadSeleccionada by remember { mutableStateOf(rangosEdad[0]) }
@@ -92,6 +94,36 @@ fun FormularioEntradaScreen(
                 }
             }
 
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // --- 3. CANTIDAD DE ACOMPAÑANTES ---
+            Text("3. Cantidad de acompañantes", style = MaterialTheme.typography.bodyLarge)
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    enabled = cantidadAcompanantes > 0,
+                    onClick = { cantidadAcompanantes-- }
+                ) {
+                    Text("−")
+                }
+
+                Text(
+                    text = cantidadAcompanantes.toString(),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                IconButton(
+                    enabled = cantidadAcompanantes < 6,
+                    onClick = { cantidadAcompanantes++ }
+                ) {
+                    Text("+")
+                }
+            }
+
             Spacer(modifier = Modifier.height(8.dp))
 
             // --- BOTÓN REGISTRAR ---
@@ -101,7 +133,8 @@ fun FormularioEntradaScreen(
                     viewModel.registrarIngreso(
                         numeroPuerta = numeroEntrada,
                         tipoFlujo = flujoSeleccionado,
-                        rangoEdad = edadSeleccionada
+                        rangoEdad = edadSeleccionada,
+                        cantidadAcompanantes = cantidadAcompanantes
                     )
 
                     mensajeConfirmacion = "¡Registrado en Puerta $numeroEntrada con éxito!"

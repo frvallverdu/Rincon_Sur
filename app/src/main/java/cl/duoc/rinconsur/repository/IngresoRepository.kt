@@ -9,8 +9,18 @@ class IngresoRepository {
     // Diccionario que actúa como "Base de Datos" simulada en memoria
     val registrosPorPuerta = mutableStateMapOf<Int, MutableMap<String, MutableList<IngresoRegistro>>>()
 
-    fun registrarIngreso(numeroPuerta: Int, tipoFlujo: String, rangoEdad: String) {
-        val nuevoRegistro = IngresoRegistro(numeroPuerta, tipoFlujo, rangoEdad)
+    fun registrarIngreso(
+        numeroPuerta: Int,
+        tipoFlujo: String,
+        rangoEdad: String,
+        cantidadAcompanantes: Int
+    ) {
+        val nuevoRegistro = IngresoRegistro(
+            numeroEntrada = numeroPuerta,
+            tipoFlujo = tipoFlujo,
+            rangoEdad = rangoEdad,
+            cantidadAcompanantes = cantidadAcompanantes
+        )
 
         val mapaPuerta = registrosPorPuerta.getOrPut(numeroPuerta) {
             mutableMapOf(
@@ -19,8 +29,6 @@ class IngresoRepository {
             )
         }
 
-        // mapaPuerta[tipoFlujo] usa el String ("Cliente" o "Transeúnte") como llave para encontrar
-        // la lista correcta y con '?.add' agrega el nuevo registro de forma segura.
         mapaPuerta[tipoFlujo]?.add(nuevoRegistro)
     }
 }
