@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 android {
@@ -72,4 +74,15 @@ dependencies {
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Room (SQLite)
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
+
+    // DataStore (Sesión activa de usuario)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+}
+room{
+    schemaDirectory("$projectDir/schemas")
 }
