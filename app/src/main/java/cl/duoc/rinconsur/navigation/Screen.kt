@@ -1,7 +1,9 @@
 package cl.duoc.rinconsur.navigation
 
 sealed class Screen(val route: String) {
+    data object Login : Screen("login")
 
+    data object Registro : Screen("registro")
     data object Inicio : Screen("inicio")
 
     data object Resultados : Screen("resultados")
