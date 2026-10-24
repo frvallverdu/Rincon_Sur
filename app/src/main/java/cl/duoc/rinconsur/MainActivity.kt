@@ -39,6 +39,10 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import cl.duoc.rinconsur.viewmodel.EstadoSesion
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import androidx.activity.compose.BackHandler
+
 
 class MainActivity : ComponentActivity() {
 
@@ -61,6 +65,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val authState by authViewModel.uiState.collectAsStateWithLifecycle()
                 val estadoSesion by authViewModel.estadoSesion.collectAsStateWithLifecycle()
+                val context = LocalContext.current
 
                 // Recolector de eventos de navegación emitidos por el ViewModel
                 LaunchedEffect(Unit) {
@@ -134,6 +139,8 @@ class MainActivity : ComponentActivity() {
                                         onContrasenaChange = authViewModel::actualizarContrasena,
                                         onIniciarSesion = authViewModel::iniciarSesion,
                                         onIrARegistro = {
+                                            authViewModel.limpiarFormulario()
+
                                             navController.navigate(Screen.Registro.route) {
                                                 launchSingleTop = true
                                             }
@@ -141,6 +148,23 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 composable(Screen.Registro.route) {
+                                    BackHandler {
+                                        if (!authState.estaCargando){
+                                            authViewModel.limpiarFormulario()
+                                            navController.popBackStack()
+                                        }
+                                    }
+                                    LaunchedEffect(authState.registroCompletado) {
+                                        if (authState.registroCompletado) {
+                                            authViewModel.prepararLoginRegistro()
+                                            Toast.makeText(
+                                                context,
+                                                "Cuenta creada. Ahora puedes iniciar sesión",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                            navController.popBackStack()
+                                        }
+                                    }
                                     RegistroScreen(
                                         estado = authState,
                                         onNombreChange = authViewModel::actualizarNombre,
@@ -148,13 +172,14 @@ class MainActivity : ComponentActivity() {
                                         onContrasenaChange = authViewModel::actualizarContrasena,
                                         onRegistrarUsuario = authViewModel::registrarUsuario,
                                         onVolverALogin = {
+                                            authViewModel.limpiarFormulario()
                                             navController.popBackStack()
                                         }
                                     )
                                 }
                                 // Ruta de inicio
                                 composable(Screen.Inicio.route) {
-                                    HomeScreen(viewModel = mainViewModel)
+                                    HomeScreen(viewModel = mainViewModel, onCerrarSesion = authViewModel::cerrarSesion)
                                 }
 
                                 // Ruta de resultados / estadísticas

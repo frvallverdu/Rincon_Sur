@@ -8,5 +8,6 @@ data class AuthUiState(
     val errorEmail: String? = null,
     val errorContrasena: String? = null,
     val estaCargando: Boolean = false,
-    val mensaje: String? = null
+    val mensaje: String? = null,
+    val registroCompletado: Boolean = false
 )

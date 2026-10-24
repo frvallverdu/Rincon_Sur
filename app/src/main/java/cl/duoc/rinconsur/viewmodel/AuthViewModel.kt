@@ -107,7 +107,8 @@ class AuthViewModel(
                         _uiState.update { estadoActual ->
                             estadoActual.copy(
                                 contrasena = "",
-                                mensaje = "Cuenta creada. Ahora puedes iniciar sesión."
+                                mensaje = null,
+                                registroCompletado = true
                             )
                         }
                     }
@@ -194,5 +195,48 @@ class AuthViewModel(
                 }
             }
         }
+    }
+    fun cerrarSesion(){
+        if (_uiState.value.estaCargando){
+            return
+        }
+        _uiState.update { estadoActual ->
+            estadoActual.copy(
+                estaCargando = true,
+                mensaje = null,
+            )
+        }
+        viewModelScope.launch {
+            try {
+                repository.cerrarSesion()
+                _uiState.value = AuthUiState()
+            } catch (error: CancellationException){
+                throw error
+            } catch (error: Exception){
+                _uiState.update { estadoActual ->
+                    estadoActual.copy(
+                        mensaje = "No se pudo cerrar la sesión. Reintenta"
+                    )
+                }
+            } finally {
+                _uiState.update { estadoActual ->
+                    estadoActual.copy(
+                        estaCargando = false
+                    )
+                }
+            }
+        }
+    }
+    fun limpiarFormulario(){
+        if (_uiState.value.estaCargando){
+            return
+        }
+        _uiState.value = AuthUiState()
+    }
+    fun prepararLoginRegistro(){
+        val emailRegistrado = _uiState.value.email
+        _uiState.value = AuthUiState(
+            email = emailRegistrado
+        )
     }
 }
