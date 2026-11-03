@@ -8,6 +8,16 @@ sealed class Screen(val route: String) {
 
     data object Resultados : Screen("resultados")
 
+    data object Ubicacion : Screen("ubicacion")
+
+    data class VerificarEntrada(
+        val numeroEntrada: Int
+    ) : Screen(ROUTE){
+        fun buildRoute(): String = "verificar-entrada/$numeroEntrada"
+        companion object {
+            const val ROUTE = "verificar-entrada/{numeroEntrada}"
+        }
+    }
     data class Entrada(val numeroEntrada: Int) : Screen(ROUTE) {
         
         /**

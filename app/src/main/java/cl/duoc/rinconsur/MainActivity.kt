@@ -42,6 +42,10 @@ import androidx.compose.ui.unit.dp
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.BackHandler
+import androidx.lifecycle.viewmodel.compose.viewModel
+import cl.duoc.rinconsur.ui.screens.UbicacionScreen
+import cl.duoc.rinconsur.viewmodel.UbicacionViewModel
+import cl.duoc.rinconsur.ui.screens.UbicacionRoute
 
 
 class MainActivity : ComponentActivity() {
@@ -75,8 +79,10 @@ class MainActivity : ComponentActivity() {
                                 val destinationRoute = when (val screen = event.route) {
                                     Screen.Login -> screen.route
                                     Screen.Registro -> screen.route
+                                    Screen.Ubicacion -> screen.route
                                     is Screen.Inicio -> screen.route
                                     is Screen.Resultados -> screen.route
+                                    is Screen.VerificarEntrada -> screen.buildRoute()
                                     is Screen.Entrada -> screen.buildRoute()
                                 }
                                 navController.navigate(destinationRoute) {
@@ -84,9 +90,11 @@ class MainActivity : ComponentActivity() {
                                         val popRoute = when (target) {
                                             Screen.Login -> target.route
                                             Screen.Registro -> target.route
+                                            Screen.Ubicacion -> target.route
                                             is Screen.Inicio -> target.route
                                             is Screen.Resultados -> target.route
                                             is Screen.Entrada -> target.buildRoute()
+                                            is Screen.VerificarEntrada -> target.buildRoute()
                                         }
                                         popUpTo(popRoute) { inclusive = event.inclusive }
                                     }
@@ -185,6 +193,32 @@ class MainActivity : ComponentActivity() {
                                 // Ruta de resultados / estadísticas
                                 composable(Screen.Resultados.route) {
                                     ResultadosScreen(viewModel = mainViewModel)
+                                }
+
+                                composable(Screen.Ubicacion.route){
+                                    UbicacionRoute()
+                                }
+                                composable(
+                                    route = Screen.VerificarEntrada.ROUTE,
+                                    arguments = listOf(
+                                        navArgument("numeroEntrada"){
+                                            type = NavType.IntType
+                                        }
+                                    )
+                                ) { backStackEntry ->
+                                    val numeroEntrada = backStackEntry.arguments?.getInt("numeroEntrada") ?: 1
+                                    UbicacionRoute(
+                                        onUbicacionVerificada = {
+                                            navController.navigate(
+                                                Screen.Entrada(numeroEntrada).buildRoute()
+                                            ){
+                                                popUpTo(backStackEntry.destination.id){
+                                                    inclusive = true
+                                                }
+                                                launchSingleTop = true
+                                            }
+                                        }
+                                    )
                                 }
 
                                 // Ruta de entradas con argumento entero

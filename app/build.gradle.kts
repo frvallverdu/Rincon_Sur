@@ -82,6 +82,9 @@ dependencies {
 
     // DataStore (Sesión activa de usuario)
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //Dependencia de la Ubicación
+    implementation("com.google.android.gms:play-services-location:21.4.0")
 }
 room{
     schemaDirectory("$projectDir/schemas")
