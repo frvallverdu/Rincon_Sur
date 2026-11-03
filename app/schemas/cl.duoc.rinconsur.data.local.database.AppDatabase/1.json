@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fedd456a56b6721e4a06b67b6ed7088a",
+    "identityHash": "b82edd900e40dcd658f91332650577b0",
     "entities": [
       {
         "tableName": "usuarios",
@@ -50,11 +50,59 @@
             "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_usuarios_email` ON `${TABLE_NAME}` (`email`)"
           }
         ]
+      },
+      {
+        "tableName": "ingresos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `numeroEntrada` INTEGER NOT NULL, `tipoFlujo` TEXT NOT NULL, `rangoEdad` TEXT NOT NULL, `cantidadAcompanantes` INTEGER NOT NULL, `fechaHora` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numeroEntrada",
+            "columnName": "numeroEntrada",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tipoFlujo",
+            "columnName": "tipoFlujo",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rangoEdad",
+            "columnName": "rangoEdad",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cantidadAcompanantes",
+            "columnName": "cantidadAcompanantes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fechaHora",
+            "columnName": "fechaHora",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fedd456a56b6721e4a06b67b6ed7088a')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b82edd900e40dcd658f91332650577b0')"
     ]
   }
 }

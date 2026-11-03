@@ -2,23 +2,30 @@ package cl.duoc.rinconsur.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.duoc.rinconsur.data.repository.IngresoRepository
 import cl.duoc.rinconsur.navigation.NavigationEvent
 import cl.duoc.rinconsur.navigation.Screen
-import cl.duoc.rinconsur.repository.IngresoRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import androidx.lifecycle.AndroidViewModel
+import android.app.Application
+import cl.duoc.rinconsur.data.local.database.AppDatabase
 
 /**
  * MainViewModel administra el estado de la interfaz de usuario (UI) y
  * emite los eventos de navegación mediante un SharedFlow.
  */
-class MainViewModel(
-    // Inyección de la capa de datos (Repositorio que almacena los registros)
-    private val repository: IngresoRepository = IngresoRepository()
-) : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val db = AppDatabase.getDatabase(application)
+    private val repository = IngresoRepository(db.ingresoDao())
 
+    init {
+        viewModelScope.launch {
+            repository.cargarDatosDesdeBD()
+        }
+    }
     // Canal privado de eventos de navegación (Emisor)
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     
@@ -31,19 +38,20 @@ class MainViewModel(
     /**
      * Guarda un nuevo ingreso delegándolo al repositorio de datos.
      */
-
     fun registrarIngreso(
         numeroPuerta: Int,
         tipoFlujo: String,
         rangoEdad: String,
-        cantidadAcompanantes: Int
+        cantidadAcompanantes: Int = 0
     ) {
-        repository.registrarIngreso(
-            numeroPuerta,
-            tipoFlujo,
-            rangoEdad,
-            cantidadAcompanantes
-        )
+        viewModelScope.launch {
+            repository.registrarIngreso(
+                numeroPuerta = numeroPuerta,
+                tipoFlujo = tipoFlujo,
+                rangoEdad = rangoEdad,
+                cantidadAcompanantes = cantidadAcompanantes
+            )
+        }
     }
 
     /**

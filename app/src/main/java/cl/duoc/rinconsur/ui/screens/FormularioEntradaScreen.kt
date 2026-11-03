@@ -123,9 +123,6 @@ fun FormularioEntradaScreen(
                     Text("+")
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
             // --- BOTÓN REGISTRAR ---
             Button(
                 onClick = {
