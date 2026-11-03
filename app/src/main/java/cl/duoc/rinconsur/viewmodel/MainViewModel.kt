@@ -9,16 +9,23 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import androidx.lifecycle.AndroidViewModel
+import android.app.Application
+import cl.duoc.rinconsur.data.local.database.AppDatabase
 
 /**
  * MainViewModel administra el estado de la interfaz de usuario (UI) y
  * emite los eventos de navegación mediante un SharedFlow.
  */
-class MainViewModel(
-    // Inyección de la capa de datos (Repositorio que almacena los registros)
-    private val repository: IngresoRepository = IngresoRepository()
-) : ViewModel() {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    private val db = AppDatabase.getDatabase(application)
+    private val repository = IngresoRepository(db.ingresoDao())
 
+    init {
+        viewModelScope.launch {
+            repository.cargarDatosDesdeBD()
+        }
+    }
     // Canal privado de eventos de navegación (Emisor)
     private val _navigationEvents = MutableSharedFlow<NavigationEvent>()
     

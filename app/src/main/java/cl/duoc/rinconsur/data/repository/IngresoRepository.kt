@@ -7,12 +7,42 @@ import cl.duoc.rinconsur.data.local.ingreso.IngresoEntity
 import cl.duoc.rinconsur.model.IngresoRegistro
 
 class IngresoRepository(
-    private val ingresoDao: IngresoDao? = null // DAO de Room
+    private val ingresoDao: IngresoDao // DAO de Room
 ) {
 
     // Diccionario en memoria para respuestas rápidas en la UI
     val registrosPorPuerta = mutableStateMapOf<Int, MutableMap<String, MutableList<IngresoRegistro>>>()
 
+    suspend fun cargarDatosDesdeBD() {
+        ingresoDao.obtenerTodosLosIngresos().collect { listaEntities ->
+            // 1. 'listaEntities' es la lista de filas de la tabla SQLite que nos envía Room.
+
+            // 2. Limpiamos la pantalla previa para no duplicar información
+            registrosPorPuerta.clear()
+
+            // 3. Tomamos cada elemento de esa lista entregada por Room
+            for (entity in listaEntities) {
+
+                // 4. Convertimos el dato de la BD al objeto de nuestra app
+                val registro = IngresoRegistro(
+                    numeroEntrada = entity.numeroEntrada,
+                    tipoFlujo = entity.tipoFlujo,
+                    rangoEdad = entity.rangoEdad,
+                    cantidadAcompanantes = entity.cantidadAcompanantes,
+                    fechaHora = entity.fechaHora
+                )
+
+                // 5. Lo metemos a nuestro mapa para que la pantalla de Resultados se dibuje
+                val mapaPuerta = registrosPorPuerta.getOrPut(entity.numeroEntrada) {
+                    mutableMapOf(
+                        "Cliente" to mutableStateListOf(),
+                        "Transeúnte" to mutableStateListOf()
+                    )
+                }
+                mapaPuerta[entity.tipoFlujo]?.add(registro)
+            }
+        }
+    }
     suspend fun registrarIngreso(
         numeroPuerta: Int,
         tipoFlujo: String,
@@ -26,17 +56,8 @@ class IngresoRepository(
             cantidadAcompanantes = cantidadAcompanantes
         )
 
-        // 1. Guardar en memoria (para actualizar la pantalla de inmediato)
-        val mapaPuerta = registrosPorPuerta.getOrPut(numeroPuerta) {
-            mutableMapOf(
-                "Cliente" to mutableStateListOf(),
-                "Transeúnte" to mutableStateListOf()
-            )
-        }
-        mapaPuerta[tipoFlujo]?.add(nuevoRegistro)
-
-        // 2. Guardar en la Base de Datos SQLite usando Room
-        ingresoDao?.insertarIngreso(
+        // Guardar directamente en la Base de Datos SQLite usando Room
+        ingresoDao.insertarIngreso(
             IngresoEntity(
                 numeroEntrada = numeroPuerta,
                 tipoFlujo = tipoFlujo,
