@@ -14,7 +14,7 @@ import cl.duoc.rinconsur.data.local.ingreso.IngresoEntity
     el entities es para registrar las tablas que tendra la base de datos segun el
     user entity
  */
-@Database(entities = [Usuario::class, IngresoEntity::class], version = 1)
+@Database(entities = [Usuario::class, IngresoEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     /*
         ahora creamos una funcion abstracta que va a retornar
