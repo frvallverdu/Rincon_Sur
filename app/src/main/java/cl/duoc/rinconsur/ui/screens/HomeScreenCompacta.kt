@@ -25,7 +25,7 @@ import cl.duoc.rinconsur.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
+fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), onCerrarSesion: () -> Unit) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -77,10 +77,10 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
 
                             // Opción Salir
                             DropdownMenuItem(
-                                text = { Text("Salir") },
+                                text = { Text("Cerrar Sesión") },
                                 onClick = {
                                     menuExpanded = false
-                                    android.os.Process.killProcess(android.os.Process.myPid())
+                                    onCerrarSesion()
                                 }
                             )
                         }
@@ -193,5 +193,7 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
 @Preview(name = "Compact", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
 fun HomeScreenCompactaPreview() {
-    HomeScreenCompacta()
+    HomeScreenCompacta(
+        onCerrarSesion = {}
+    )
 }
