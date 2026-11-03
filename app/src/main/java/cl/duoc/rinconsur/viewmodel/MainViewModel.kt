@@ -2,9 +2,9 @@ package cl.duoc.rinconsur.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cl.duoc.rinconsur.data.repository.IngresoRepository
 import cl.duoc.rinconsur.navigation.NavigationEvent
 import cl.duoc.rinconsur.navigation.Screen
-import cl.duoc.rinconsur.repository.IngresoRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -31,19 +31,20 @@ class MainViewModel(
     /**
      * Guarda un nuevo ingreso delegándolo al repositorio de datos.
      */
-
     fun registrarIngreso(
         numeroPuerta: Int,
         tipoFlujo: String,
         rangoEdad: String,
-        cantidadAcompanantes: Int
+        cantidadAcompanantes: Int = 0
     ) {
-        repository.registrarIngreso(
-            numeroPuerta,
-            tipoFlujo,
-            rangoEdad,
-            cantidadAcompanantes
-        )
+        viewModelScope.launch {
+            repository.registrarIngreso(
+                numeroPuerta = numeroPuerta,
+                tipoFlujo = tipoFlujo,
+                rangoEdad = rangoEdad,
+                cantidadAcompanantes = cantidadAcompanantes
+            )
+        }
     }
 
     /**

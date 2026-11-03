@@ -4,21 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import cl.duoc.rinconsur.data.local.ingreso.IngresoDao
 import cl.duoc.rinconsur.data.local.user.Usuario
 import cl.duoc.rinconsur.data.local.user.UsuarioDao
+import cl.duoc.rinconsur.data.local.ingreso.IngresoEntity
 
 /*
     notacion database para decirle a room que es una base de datos
     el entities es para registrar las tablas que tendra la base de datos segun el
     user entity
  */
-@Database(entities = [Usuario::class], version = 1)
+@Database(entities = [Usuario::class, IngresoEntity::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     /*
         ahora creamos una funcion abstracta que va a retornar
         el dao del usuario
      */
     abstract fun usuarioDao(): UsuarioDao
+    abstract fun ingresoDao(): IngresoDao // <-- Agregar esta línea
 
     companion object {
         /*
