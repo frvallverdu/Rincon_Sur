@@ -43,7 +43,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "rincon_sur_database"
-                ).build().also { database ->
+                )
+                .fallbackToDestructiveMigration(dropAllTables = true)
+                .build().also { database ->
                     INSTANCE = database
                 }
             }
