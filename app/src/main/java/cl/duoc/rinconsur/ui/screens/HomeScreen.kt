@@ -9,14 +9,23 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 @Composable
 fun HomeScreen(
     viewModel: MainViewModel = viewModel(),
+    nombreUsuario: String = "",
     onCerrarSesion: () -> Unit
 ) {
     val windowSizeClass = obtenerWindowSizeClass()
 
     when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> HomeScreenCompacta(viewModel = viewModel, onCerrarSesion = onCerrarSesion)
-        WindowWidthSizeClass.Medium -> HomeScreenMediana(viewModel = viewModel)
-        WindowWidthSizeClass.Expanded -> HomeScreenExpandida(viewModel = viewModel)
-        else -> HomeScreenCompacta(viewModel = viewModel, onCerrarSesion = onCerrarSesion)
+        WindowWidthSizeClass.Compact -> HomeScreenCompacta(
+            viewModel = viewModel,
+            nombreUsuario = nombreUsuario,
+            onCerrarSesion = onCerrarSesion
+        )
+        WindowWidthSizeClass.Medium -> HomeScreenMediana(viewModel = viewModel, nombreUsuario = nombreUsuario)
+        WindowWidthSizeClass.Expanded -> HomeScreenExpandida(viewModel = viewModel, nombreUsuario = nombreUsuario)
+        else -> HomeScreenCompacta(
+            viewModel = viewModel,
+            nombreUsuario = nombreUsuario,
+            onCerrarSesion = onCerrarSesion
+        )
     }
 }

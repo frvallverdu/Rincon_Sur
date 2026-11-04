@@ -28,6 +28,7 @@ class UserRepository(
     private val userPreferences: UserSessionPrefs
 ){
     val isLoggedIn: Flow<Boolean> = userPreferences.isLoggedIn
+    val nombreUsuario: Flow<String> = userPreferences.nombreUsuario
     suspend fun registrarUsuario(
         nombre: String,
         email: String,

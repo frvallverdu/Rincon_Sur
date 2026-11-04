@@ -21,7 +21,7 @@ import cl.duoc.rinconsur.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
+fun HomeScreenMediana(viewModel: MainViewModel = viewModel(), nombreUsuario: String = "") {
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Imagen de fondo
@@ -61,7 +61,7 @@ fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "¡Bien Venido!",
+                        text = nombreUsuario.trim().takeIf { it.isNotEmpty() }?.let { "¡Hola, $it!" } ?: "¡Bienvenido!",
                         style = MaterialTheme.typography.headlineLarge // Texto más grande para Medium
                     )
 
@@ -116,11 +116,4 @@ fun HomeScreenMediana(viewModel: MainViewModel = viewModel()) {
             }
         }
     }
-}
-
-// Preview configurado con un ancho de 700dp (Rango de Medium es 600dp a 840dp)
-@Preview(name = "Medium Screen", widthDp = 700, heightDp = 1000, showBackground = true)
-@Composable
-fun HomeScreenMedianaPreview() {
-    HomeScreenMediana()
 }

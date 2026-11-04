@@ -15,7 +15,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cl.duoc.rinconsur.R
@@ -25,7 +24,7 @@ import cl.duoc.rinconsur.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), onCerrarSesion: () -> Unit) {
+fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), nombreUsuario: String = "", onCerrarSesion: () -> Unit) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -117,7 +116,7 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), onCerrarSesion: (
                     var fontSize by remember { mutableStateOf(24.sp) }
 
                     Text(
-                        text = "¡Bien Venido!",
+                        text = nombreUsuario.trim().takeIf { it.isNotEmpty() }?.let { "¡Hola, $it!" } ?: "¡Hola!",
                         style = MaterialTheme.typography.headlineMedium.copy(fontSize = fontSize),
                         maxLines = 1,
                         softWrap = false,
@@ -200,10 +199,3 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), onCerrarSesion: (
     }
 }
 
-@Preview(name = "Compact", widthDp = 360, heightDp = 800, showBackground = true)
-@Composable
-fun HomeScreenCompactaPreview() {
-    HomeScreenCompacta(
-        onCerrarSesion = {}
-    )
-}

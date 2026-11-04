@@ -22,7 +22,7 @@ import cl.duoc.rinconsur.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
+fun HomeScreenExpandida(viewModel: MainViewModel = viewModel(), nombreUsuario: String = "") {
     Box(modifier = Modifier.fillMaxSize()) {
 
         // Imagen de fondo
@@ -79,7 +79,7 @@ fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
                         )
 
                         Text(
-                            text = "¡Bien Venido!",
+                            text = nombreUsuario.trim().takeIf { it.isNotEmpty() }?.let { "¡Hola, $it!" } ?: "¡Bienvenido!",
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.fillMaxWidth()
@@ -151,10 +151,4 @@ fun HomeScreenExpandida(viewModel: MainViewModel = viewModel()) {
             }
         }
     }
-}
-
-@Preview(name = "Expanded Screen", widthDp = 1200, heightDp = 800, showBackground = true)
-@Composable
-fun HomeScreenExpandidaPreview() {
-    HomeScreenExpandida()
 }
