@@ -65,6 +65,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 val authState by authViewModel.uiState.collectAsStateWithLifecycle()
                 val estadoSesion by authViewModel.estadoSesion.collectAsStateWithLifecycle()
+                val nombreUsuario by authViewModel.nombreUsuario.collectAsStateWithLifecycle(initialValue = "")
                 val context = LocalContext.current
 
                 // Recolector de eventos de navegación emitidos por el ViewModel
@@ -185,7 +186,7 @@ class MainActivity : ComponentActivity() {
                                 }
                                 // Ruta de inicio
                                 composable(Screen.Inicio.route) {
-                                    HomeScreen(viewModel = mainViewModel, onCerrarSesion = authViewModel::cerrarSesion)
+                                    HomeScreen(viewModel = mainViewModel, nombreUsuario = nombreUsuario, onCerrarSesion = authViewModel::cerrarSesion)
                                 }
 
                                 // Ruta de resultados / estadísticas
@@ -266,3 +267,4 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+

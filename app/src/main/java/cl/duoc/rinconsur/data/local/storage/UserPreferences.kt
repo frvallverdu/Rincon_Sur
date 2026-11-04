@@ -38,6 +38,10 @@ class UserSessionPrefs(context: Context) {
         preferences[IS_LOGGED_IN] ?: false
     }
 
+    val nombreUsuario: Flow<String> = appContext.dataStore.data.map { preferences ->
+        preferences[USER_NAME].orEmpty()
+    }
+
     /*
         esta funcion se encarga de guardar la sesion una vez
         el usuario se registra correctamente
