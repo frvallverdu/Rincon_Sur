@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import androidx.compose.animation.Crossfade
 
 /** Muestra la foto (o un botón para tomarla). Al tocar abre la cámara. */
 @Composable
@@ -33,17 +34,22 @@ fun PhotoBox(imageUri: String?, circle: Boolean, onTakePhoto: () -> Unit) {
             .clickable(onClick = onTakePhoto),
         contentAlignment = Alignment.Center
     ) {
-        if (imageUri != null) {
-            AsyncImage(
-                model = imageUri,
-                contentDescription = "Foto",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-            )
-        } else {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(Icons.Default.PhotoCamera, contentDescription = null)
-                Text("Tomar foto", style = MaterialTheme.typography.bodySmall)
+        Crossfade(
+            targetState = imageUri,
+            label = "cambio_foto_perfil"
+        ) { uri ->
+            if (uri != null) {
+                AsyncImage(
+                    model = uri,
+                    contentDescription = "Foto",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(Icons.Default.PhotoCamera, contentDescription = null)
+                    Text("Tomar foto", style = MaterialTheme.typography.bodySmall)
+                }
             }
         }
     }
