@@ -8,14 +8,16 @@ import cl.duoc.rinconsur.data.local.ingreso.IngresoDao
 import cl.duoc.rinconsur.data.local.user.Usuario
 import cl.duoc.rinconsur.data.local.user.UsuarioDao
 import cl.duoc.rinconsur.data.local.ingreso.IngresoEntity
-
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 /*
     notacion database para decirle a room que es una base de datos
     el entities es para registrar las tablas que tendra la base de datos segun el
     user entity
  */
-@Database(entities = [Usuario::class, IngresoEntity::class], version = 2)
+@Database(entities = [Usuario::class, IngresoEntity::class], version = 3)
 abstract class AppDatabase : RoomDatabase() {
+
     /*
         ahora creamos una funcion abstracta que va a retornar
         el dao del usuario
@@ -24,6 +26,30 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun ingresoDao(): IngresoDao // <-- Agregar esta línea
 
     companion object {
+
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+            CREATE TABLE IF NOT EXISTS `ingresos` (
+                `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                `numeroEntrada` INTEGER NOT NULL,
+                `tipoFlujo` TEXT NOT NULL,
+                `rangoEdad` TEXT NOT NULL,
+                `cantidadAcompanantes` INTEGER NOT NULL,
+                `fechaHora` TEXT NOT NULL
+            )
+            """.trimIndent()
+                )
+            }
+        }
+
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE usuarios ADD COLUMN fotoPerfilUri TEXT")
+            }
+        }
+
         /*
             la notacion volatile hace que la variable sea
             visible a todos los hilos de la aplicacion
@@ -44,8 +70,8 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "rincon_sur_database"
                 )
-                .fallbackToDestructiveMigration(dropAllTables = true)
-                .build().also { database ->
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .build().also { database ->
                     INSTANCE = database
                 }
             }

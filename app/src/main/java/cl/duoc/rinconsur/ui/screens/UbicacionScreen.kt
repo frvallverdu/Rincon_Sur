@@ -8,6 +8,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,12 +20,20 @@ import cl.duoc.rinconsur.viewmodel.UbicacionUiState
 @Composable
 fun UbicacionScreen(
     estado: UbicacionUiState,
-    onConsultarUbicacion: () -> Unit
+    onConsultarUbicacion: () -> Unit,
+    onVolver: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ){
+        TextButton(onClick = onVolver) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Volver"
+            )
+            Text(" Volver")
+        }
         Text(
             text = "Verificar ubicación",
             style = MaterialTheme.typography.headlineMedium

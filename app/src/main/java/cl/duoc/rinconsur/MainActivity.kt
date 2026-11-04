@@ -33,7 +33,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cl.duoc.rinconsur.ui.screens.LoginScreen
 import cl.duoc.rinconsur.ui.screens.RegistroScreen
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
@@ -42,9 +41,6 @@ import androidx.compose.ui.unit.dp
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.BackHandler
-import androidx.lifecycle.viewmodel.compose.viewModel
-import cl.duoc.rinconsur.ui.screens.UbicacionScreen
-import cl.duoc.rinconsur.viewmodel.UbicacionViewModel
 import cl.duoc.rinconsur.ui.screens.UbicacionRoute
 
 
@@ -178,7 +174,9 @@ class MainActivity : ComponentActivity() {
                                         onNombreChange = authViewModel::actualizarNombre,
                                         onEmailChange = authViewModel::actualizarEmail,
                                         onContrasenaChange = authViewModel::actualizarContrasena,
-                                        onRegistrarUsuario = authViewModel::registrarUsuario,
+                                        onRegistrarUsuario = { fotoPerfilUri ->
+                                            authViewModel.registrarUsuario(fotoPerfilUri)
+                                        },
                                         onVolverALogin = {
                                             authViewModel.limpiarFormulario()
                                             navController.popBackStack()
@@ -196,7 +194,9 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(Screen.Ubicacion.route){
-                                    UbicacionRoute()
+                                    UbicacionRoute(
+                                        onVolver = { navController.navigateUp() }
+                                    )
                                 }
                                 composable(
                                     route = Screen.VerificarEntrada.ROUTE,
@@ -208,11 +208,12 @@ class MainActivity : ComponentActivity() {
                                 ) { backStackEntry ->
                                     val numeroEntrada = backStackEntry.arguments?.getInt("numeroEntrada") ?: 1
                                     UbicacionRoute(
+                                        onVolver = { navController.navigateUp() },
                                         onUbicacionVerificada = {
                                             navController.navigate(
                                                 Screen.Entrada(numeroEntrada).buildRoute()
-                                            ){
-                                                popUpTo(backStackEntry.destination.id){
+                                            ) {
+                                                popUpTo(backStackEntry.destination.id) {
                                                     inclusive = true
                                                 }
                                                 launchSingleTop = true
