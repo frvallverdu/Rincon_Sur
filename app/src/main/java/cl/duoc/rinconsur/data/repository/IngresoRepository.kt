@@ -21,25 +21,25 @@ class IngresoRepository(
             registrosPorPuerta.clear()
 
             // 3. Tomamos cada elemento de esa lista entregada por Room
-            for (entity in listaEntities) {
+            for ((_, numeroEntrada, tipoFlujo, rangoEdad, cantidadAcompanantes, fechaHora) in listaEntities) {
 
                 // 4. Convertimos el dato de la BD al objeto de nuestra app
                 val registro = IngresoRegistro(
-                    numeroEntrada = entity.numeroEntrada,
-                    tipoFlujo = entity.tipoFlujo,
-                    rangoEdad = entity.rangoEdad,
-                    cantidadAcompanantes = entity.cantidadAcompanantes,
-                    fechaHora = entity.fechaHora
+                    numeroEntrada = numeroEntrada,
+                    tipoFlujo = tipoFlujo,
+                    rangoEdad = rangoEdad,
+                    cantidadAcompanantes = cantidadAcompanantes,
+                    fechaHora = fechaHora
                 )
 
                 // 5. Lo metemos a nuestro mapa para que la pantalla de Resultados se dibuje
-                val mapaPuerta = registrosPorPuerta.getOrPut(entity.numeroEntrada) {
+                val mapaPuerta = registrosPorPuerta.getOrPut(numeroEntrada) {
                     mutableMapOf(
                         "Cliente" to mutableStateListOf(),
                         "Transeúnte" to mutableStateListOf()
                     )
                 }
-                mapaPuerta[entity.tipoFlujo]?.add(registro)
+                mapaPuerta[tipoFlujo]?.add(registro)
             }
         }
     }

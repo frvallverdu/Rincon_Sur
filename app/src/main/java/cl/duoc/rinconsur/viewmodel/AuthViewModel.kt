@@ -73,7 +73,7 @@ class AuthViewModel(
         }
     }
 
-    fun registrarUsuario() {
+    fun registrarUsuario(fotoPerfilUri: String? = null) {
         val formulario = _uiState.value
         if (formulario.estaCargando) {
             return
@@ -100,7 +100,8 @@ class AuthViewModel(
                 val resultado = repository.registrarUsuario(
                     nombre = formulario.nombre,
                     email = formulario.email,
-                    contrasena = formulario.contrasena
+                    contrasena = formulario.contrasena,
+                    fotoPerfilUri = fotoPerfilUri
                 )
                 when (resultado) {
                     ResultadoRegistro.Exito -> {

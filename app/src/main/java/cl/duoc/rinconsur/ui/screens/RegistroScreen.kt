@@ -15,12 +15,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cl.duoc.rinconsur.viewmodel.AuthUiState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import cl.duoc.rinconsur.ui.utils.CameraCapture
+import cl.duoc.rinconsur.ui.utils.PhotoBox
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.ui.Alignment
+
+
 
 @Composable
 fun RegistroScreen(
@@ -28,9 +41,24 @@ fun RegistroScreen(
     onNombreChange: (String) -> Unit,
     onEmailChange: (String) -> Unit,
     onContrasenaChange: (String) -> Unit,
-    onRegistrarUsuario: () -> Unit,
+    onRegistrarUsuario: (String?) -> Unit,
     onVolverALogin: () -> Unit
 ) {
+    var mostrarCamara by rememberSaveable { mutableStateOf(false) }
+    var selfieUri by rememberSaveable { mutableStateOf<String?>(null) }
+
+    if (mostrarCamara) {
+        CameraCapture(
+            carpeta = "usuarios",
+            onImageCaptured = { uri ->
+                selfieUri = uri.toString()
+                mostrarCamara = false
+            },
+            onClose = { mostrarCamara = false }
+        )
+        return
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -43,6 +71,16 @@ fun RegistroScreen(
             text = "Crear una cuenta",
             style = MaterialTheme.typography.headlineMedium
         )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            PhotoBox(
+                imageUri = selfieUri,
+                circle = true,
+                onTakePhoto = { mostrarCamara = true }
+            )
+        }
         OutlinedTextField(
             value = estado.nombre,
             onValueChange = onNombreChange,
@@ -93,7 +131,7 @@ fun RegistroScreen(
             modifier = Modifier.fillMaxWidth()
         )
         Button(
-            onClick = onRegistrarUsuario,
+            onClick = { onRegistrarUsuario(selfieUri) },
             enabled = !estado.estaCargando,
             modifier = Modifier.fillMaxWidth()
         ){
@@ -110,10 +148,13 @@ fun RegistroScreen(
         }
         TextButton(
             onClick = onVolverALogin,
-            enabled = !estado.estaCargando,
-            modifier = Modifier.fillMaxWidth()
-        ){
-            Text("Ya tengo cuenta. Iniciar Sesion")
+            enabled = !estado.estaCargando
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                contentDescription = "Volver"
+            )
+            Text("Volver")
         }
     }
 }

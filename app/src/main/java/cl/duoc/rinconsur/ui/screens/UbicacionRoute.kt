@@ -15,7 +15,8 @@ import cl.duoc.rinconsur.viewmodel.UbicacionViewModel
 
 @Composable
 fun UbicacionRoute(
-    onUbicacionVerificada: (() -> Unit)? = null
+    onUbicacionVerificada: (() -> Unit)? = null,
+    onVolver: () -> Unit
 ) {
     val contexto = LocalContext.current
     val ubicacionViewModel: UbicacionViewModel = viewModel()
@@ -47,7 +48,8 @@ fun UbicacionRoute(
             } else {
                 solicitarPermisos.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION))
             }
-        }
+        },
+        onVolver = onVolver
     )
 
 }

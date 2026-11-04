@@ -27,13 +27,12 @@ class UserRepository(
     private val usuarioDao: UsuarioDao,
     private val userPreferences: UserSessionPrefs
 ){
-    val userName: Flow<String> = userPreferences.userName
-    val userEmail: Flow<String> = userPreferences.userEmail
     val isLoggedIn: Flow<Boolean> = userPreferences.isLoggedIn
     suspend fun registrarUsuario(
         nombre: String,
         email: String,
         contrasena: String,
+        fotoPerfilUri: String? = null
     ): ResultadoRegistro{
         val emailNormalizado = email.trim().lowercase(Locale.ROOT)
         if (usuarioDao.existeUsuario(emailNormalizado) != null){
@@ -42,7 +41,8 @@ class UserRepository(
         val nuevoUsuario = Usuario(
             nombre = nombre.trim(),
             email = emailNormalizado,
-            contrasena = contrasena
+            contrasena = contrasena,
+            fotoPerfilUri = fotoPerfilUri
         )
         try{
             usuarioDao.registrarUsuario(nuevoUsuario)
