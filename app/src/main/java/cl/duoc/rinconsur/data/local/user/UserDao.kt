@@ -4,7 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 /*
     Se pone anotacion Dao para que la interfaz pueda
     acceder a los datos
@@ -30,6 +31,8 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios WHERE email = :email AND contrasena = :contrasena LIMIT 1")
     suspend fun login(email: String, contrasena: String): Usuario?
 
+    @Query("SELECT * FROM usuarios WHERE email = :email LIMIT 1")
+    fun observarUsuario(email: String): Flow<Usuario?>
     /*
         Para verificar si un usuario ya existe en la base de datos
         usaremos la siguiente query
@@ -37,4 +40,7 @@ interface UsuarioDao {
 
     @Query("SELECT * FROM usuarios WHERE email = :email LIMIT 1")
     suspend fun existeUsuario(email: String): Usuario?
+
+    @Update
+    suspend fun actualizarUsuario(usuario: Usuario): Int
 }

@@ -21,6 +21,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import cl.duoc.rinconsur.viewmodel.AuthUiState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.painterResource
+import cl.duoc.rinconsur.R
+import cl.duoc.rinconsur.ui.utils.pulsoYRotacion
 
 @Composable
 fun LoginScreen(
@@ -38,6 +44,14 @@ fun LoginScreen(
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        Image(
+            painter = painterResource(R.drawable.logo),
+            contentDescription = "Logo de Rincon Sur",
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .size(100.dp)
+                .pulsoYRotacion()
+        )
         Text(
             text = "Iniciar sesión",
             style = MaterialTheme.typography.headlineMedium

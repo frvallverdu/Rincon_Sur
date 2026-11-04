@@ -16,6 +16,13 @@ import cl.duoc.rinconsur.data.repository.ResultadoLogin
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import java.io.IOException
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.first
+import cl.duoc.rinconsur.data.repository.ResultadoEdicionPerfil
+
+
 
 class AuthViewModel(
     private val repository: UserRepository
@@ -26,6 +33,39 @@ class AuthViewModel(
     private val _estadoSesion = MutableStateFlow<EstadoSesion>(EstadoSesion.Cargando)
     val estadoSesion: StateFlow<EstadoSesion> = _estadoSesion.asStateFlow()
     val nombreUsuario: Flow<String> = repository.nombreUsuario
+
+    private val _estadoEdicion = MutableStateFlow(EditarPerfilUiState())
+    val estadoEdicion: StateFlow<EditarPerfilUiState> = _estadoEdicion.asStateFlow()
+
+    val estadoPerfil: StateFlow<PerfilUiState> = repository.perfilUsuario
+        .map { perfil ->
+            PerfilUiState(
+                estaCargando = false,
+                perfil = perfil,
+                mensajeError = if (perfil == null) {
+                    "No se encontro el perfil."
+                } else {
+                    null
+                }
+            )
+        }
+        .catch {
+            emit(
+                PerfilUiState(
+                    estaCargando = false,
+                    mensajeError = "No se pudo cargar el perfil"
+                )
+            )
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(
+                stopTimeoutMillis = 5_000,
+                replayExpirationMillis = 0
+            ),
+            initialValue = PerfilUiState()
+        )
+
     init {
         viewModelScope.launch {
             repository.isLoggedIn
@@ -45,6 +85,144 @@ class AuthViewModel(
                 }
         }
     }
+
+    fun prepararEdicionPerfil(){
+        if (_estadoEdicion.value.estaGuardando){
+            return
+        }
+        _estadoEdicion.value = EditarPerfilUiState()
+        viewModelScope.launch {
+            try {
+                val perfil = repository.perfilUsuario.first()
+                _estadoEdicion.value = if (perfil != null){
+                    EditarPerfilUiState(
+                        nombre = perfil.nombre,
+                        email = perfil.email,
+                        fotoPerfilUri = perfil.fotoPerfilUri,
+                        estaCargando = false
+                    )
+                } else {
+                    EditarPerfilUiState(
+                        estaCargando = false,
+                        mensajeError = "No se encontró el usuario conectado"
+                    )
+                }
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception){
+                _estadoEdicion.value = EditarPerfilUiState(
+                    estaCargando = false,
+                    mensajeError = "No se pudieron cargar los datos del perfil."
+                )
+            }
+        }
+    }
+    fun actualizarNombrePerfil(nombre: String){
+        if (_estadoEdicion.value.estaCargando || _estadoEdicion.value.estaGuardando) {
+            return
+        }
+        _estadoEdicion.update { estadoActual ->
+            estadoActual.copy(
+                nombre = nombre,
+                errorNombre = null,
+                mensajeError = null
+            )
+        }
+    }
+    fun actualizarEmailPerfil(email: String){
+        if (_estadoEdicion.value.estaCargando || _estadoEdicion.value.estaGuardando){
+            return
+        }
+        _estadoEdicion.update { estadoActual ->
+            estadoActual.copy(
+                email = email,
+                errorEmail = null,
+                mensajeError = null
+            )
+        }
+    }
+    fun actualizarFotoPerfil(fotoPerfilUri: String){
+        if (_estadoEdicion.value.estaCargando || _estadoEdicion.value.estaGuardando){
+            return
+        }
+        _estadoEdicion.update {estadoActual ->
+            estadoActual.copy(
+                fotoPerfilUri = fotoPerfilUri,
+                mensajeError = null
+            )
+        }
+    }
+    fun guardarPerfil(){
+        val formulario = _estadoEdicion.value
+
+        if (
+            formulario.estaCargando ||
+            formulario.estaGuardando ||
+            formulario.guardadoCompletado
+        ) {
+            return
+        }
+        val errorNombre = Validators.validarNombre(formulario.nombre)
+        val errorEmail = Validators.validarEmail(formulario.email)
+        _estadoEdicion.update {
+            it.copy(
+                errorNombre = errorNombre,
+                errorEmail = errorEmail,
+                mensajeError = null
+            )
+        }
+        if (errorNombre != null || errorEmail != null){
+            return
+        }
+        _estadoEdicion.update{
+            it.copy(estaGuardando = true)
+        }
+        viewModelScope.launch {
+            try {
+                val resultado = repository.actualizarPerfil(
+                    nombre = formulario.nombre,
+                    email = formulario.email,
+                    fotoPerfilUri = formulario.fotoPerfilUri
+                )
+                when (resultado){
+                    ResultadoEdicionPerfil.Exito -> {
+                        _estadoEdicion.update{
+                            it.copy(guardadoCompletado = true)
+                        }
+                    }
+
+                    ResultadoEdicionPerfil.CorreoExistente -> {
+                        _estadoEdicion.update {
+                            it.copy(
+                                errorEmail = "Ese correo pertenece a otra cuenta"
+                            )
+                        }
+                    }
+
+                    ResultadoEdicionPerfil.UsuarioNoEncontrado -> {
+                        _estadoEdicion.update {
+                            it.copy(
+                                mensajeError = "No se encontró tu cuenta."
+                            )
+                        }
+                    }
+                }
+            } catch (error: CancellationException){
+                throw error
+            } catch (error: Exception) {
+                _estadoEdicion.update {
+                    it.copy(
+                        mensajeError = "No se pudo completar el guardado. " + "Verifica los cambios guardados"
+                    )
+                }
+            } finally {
+                _estadoEdicion.update {
+                    it.copy(estaGuardando = false)
+                }
+            }
+        }
+    }
+
     fun actualizarNombre(nombre: String) {
         _uiState.update { estadoActual ->
             estadoActual.copy(
