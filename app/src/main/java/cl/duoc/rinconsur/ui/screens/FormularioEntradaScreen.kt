@@ -152,12 +152,3 @@ fun FormularioEntradaScreen(
     }
 }
 
-@Preview(name = "Formulario Entrada 1", showBackground = true, widthDp = 360, heightDp = 800)
-@Composable
-fun FormularioEntradaScreenPreview() {
-    MaterialTheme {
-        FormularioEntradaScreen(
-            numeroEntrada = 1
-        )
-    }
-}

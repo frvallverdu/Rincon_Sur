@@ -2,6 +2,7 @@ package cl.duoc.rinconsur.viewmodel
 
 import androidx.lifecycle.ViewModel
 import cl.duoc.rinconsur.data.repository.UserRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,7 @@ class AuthViewModel(
 
     private val _estadoSesion = MutableStateFlow<EstadoSesion>(EstadoSesion.Cargando)
     val estadoSesion: StateFlow<EstadoSesion> = _estadoSesion.asStateFlow()
+    val nombreUsuario: Flow<String> = repository.nombreUsuario
     init {
         viewModelScope.launch {
             repository.isLoggedIn
