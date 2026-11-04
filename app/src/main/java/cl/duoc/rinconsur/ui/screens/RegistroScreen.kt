@@ -32,6 +32,7 @@ import cl.duoc.rinconsur.ui.utils.PhotoBox
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.ui.Alignment
+import androidx.compose.animation.AnimatedVisibility
 
 
 
@@ -89,8 +90,8 @@ fun RegistroScreen(
             enabled = !estado.estaCargando,
             isError = estado.errorNombre != null,
             supportingText = {
-                estado.errorNombre?.let { error ->
-                    Text(error)
+                AnimatedVisibility(visible = estado.errorNombre != null) {
+                    Text(estado.errorNombre.orEmpty())
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -103,8 +104,8 @@ fun RegistroScreen(
             enabled = !estado.estaCargando,
             isError = estado.errorEmail != null,
             supportingText = {
-                estado.errorEmail?.let { error ->
-                    Text(error)
+                AnimatedVisibility(visible = estado.errorEmail!= null) {
+                    Text(estado.errorEmail.orEmpty())
                 }
             },
             keyboardOptions = KeyboardOptions(
@@ -120,9 +121,9 @@ fun RegistroScreen(
             enabled = !estado.estaCargando,
             isError = estado.errorContrasena != null,
             supportingText = {
-            estado.errorContrasena?.let { error ->
-                Text(error)
-            }
+                AnimatedVisibility(visible = estado.errorContrasena!= null) {
+                    Text(estado.errorContrasena.orEmpty())
+                }
             },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
