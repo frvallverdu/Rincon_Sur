@@ -75,10 +75,10 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), nombreUsuario: St
                             )
 
                             DropdownMenuItem(
-                                text = { Text("Verificar ubicación")},
+                                text = { Text("Ver mi perfil")},
                                 onClick = {
                                     menuExpanded = false
-                                    viewModel.navigateTo(Screen.Ubicacion)
+                                    viewModel.navigateTo(Screen.Perfil)
                                 }
                             )
 

@@ -42,7 +42,8 @@ import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.BackHandler
 import cl.duoc.rinconsur.ui.screens.UbicacionRoute
-
+import cl.duoc.rinconsur.ui.screens.PerfilScreen
+import cl.duoc.rinconsur.ui.screens.EditarPerfilScreen
 
 class MainActivity : ComponentActivity() {
 
@@ -77,6 +78,8 @@ class MainActivity : ComponentActivity() {
                                     Screen.Login -> screen.route
                                     Screen.Registro -> screen.route
                                     Screen.Ubicacion -> screen.route
+                                    Screen.Perfil -> screen.route
+                                    Screen.EditarPerfil -> screen.route
                                     is Screen.Inicio -> screen.route
                                     is Screen.Resultados -> screen.route
                                     is Screen.VerificarEntrada -> screen.buildRoute()
@@ -88,6 +91,8 @@ class MainActivity : ComponentActivity() {
                                             Screen.Login -> target.route
                                             Screen.Registro -> target.route
                                             Screen.Ubicacion -> target.route
+                                            Screen.Perfil -> target.route
+                                            Screen.EditarPerfil -> target.route
                                             is Screen.Inicio -> target.route
                                             is Screen.Resultados -> target.route
                                             is Screen.Entrada -> target.buildRoute()
@@ -194,9 +199,40 @@ class MainActivity : ComponentActivity() {
                                     ResultadosScreen(viewModel = mainViewModel)
                                 }
 
-                                composable(Screen.Ubicacion.route){
-                                    UbicacionRoute(
-                                        onVolver = { navController.navigateUp() }
+                                composable(Screen.Perfil.route){
+                                    val estadoPerfil by authViewModel.estadoPerfil.collectAsStateWithLifecycle()
+                                    PerfilScreen(
+                                        estado = estadoPerfil,
+                                        onEditar = {
+                                            authViewModel.prepararEdicionPerfil()
+                                            navController.navigate(Screen.EditarPerfil.route){
+                                                launchSingleTop = true
+                                            }
+                                        },
+                                        onVolver = {
+                                            navController.popBackStack()
+                                        }
+                                    )
+                                }
+                                composable(Screen.EditarPerfil.route){
+                                    val estadoEdicion by authViewModel.estadoEdicion.collectAsStateWithLifecycle()
+                                    LaunchedEffect(estadoEdicion.guardadoCompletado){
+                                        if (estadoEdicion.guardadoCompletado){
+                                            Toast.makeText(
+                                                context,
+                                                "Perfil Actualizado.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            navController.popBackStack()
+                                        }
+                                    }
+                                    EditarPerfilScreen(
+                                        estado = estadoEdicion,
+                                        onNombreChange =  authViewModel::actualizarNombrePerfil,
+                                        onEmailChange = authViewModel::actualizarEmailPerfil,
+                                        onFotoChange = authViewModel::actualizarFotoPerfil,
+                                        onGuardar = authViewModel::guardarPerfil,
+                                        onCancelar = { navController.popBackStack()}
                                     )
                                 }
                                 composable(
