@@ -10,6 +10,9 @@ sealed class Screen(val route: String) {
 
     data object Ubicacion : Screen("ubicacion")
 
+    data object Perfil : Screen("perfil")
+
+    data object EditarPerfil : Screen("editar-perfil")
     data class VerificarEntrada(
         val numeroEntrada: Int
     ) : Screen(ROUTE){
@@ -18,6 +21,7 @@ sealed class Screen(val route: String) {
             const val ROUTE = "verificar-entrada/{numeroEntrada}"
         }
     }
+
     data class Entrada(val numeroEntrada: Int) : Screen(ROUTE) {
         
         /**
