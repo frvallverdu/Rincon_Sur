@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
+    id("androidx.room")
 }
 
 android {
@@ -61,15 +63,39 @@ dependencies {
     implementation(libs.androidx.compose.material3.window.size.class1)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.material3)
 
     // Testing
     testImplementation(libs.junit)
+    androidTestImplementation(platform(libs.compose.bom.v20260900))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom.v20260900))
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // Debug
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Room (SQLite)
+    implementation("androidx.room:room-runtime:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    ksp("androidx.room:room-compiler:2.7.2")
+
+    // DataStore (Sesión activa de usuario)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //Dependencia de la Ubicación
+    implementation("com.google.android.gms:play-services-location:21.4.0")
+
+    // CameraX: vista previa y captura
+
+    implementation(libs.cameraxCore)
+    implementation(libs.cameraxCamera2)
+    implementation(libs.cameraxLifecycle)
+    implementation(libs.cameraxView)
+    implementation(libs.coil.compose)
+
+}
+room{
+    schemaDirectory("$projectDir/schemas")
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cl.duoc.rinconsur.model.IngresoRegistro
 import cl.duoc.rinconsur.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,8 +47,8 @@ fun ResultadosScreen(
                 val puertaNum = index + 1
                 val mapaPuerta = registrosPorPuerta[puertaNum]
 
-                val clientesList = mapaPuerta?.get("Cliente") ?: emptyList()
-                val bypassList = mapaPuerta?.get("Transeúnte") ?: emptyList()
+                val clientesList: List<IngresoRegistro> = mapaPuerta?.get("Cliente") ?: emptyList()
+                val bypassList: List<IngresoRegistro> = mapaPuerta?.get("Transeúnte") ?: emptyList()
 
                 val totalPuerta = clientesList.size + bypassList.size
 

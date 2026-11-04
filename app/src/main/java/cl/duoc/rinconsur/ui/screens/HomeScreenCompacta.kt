@@ -25,7 +25,7 @@ import cl.duoc.rinconsur.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
+fun HomeScreenCompacta(viewModel: MainViewModel = viewModel(), onCerrarSesion: () -> Unit) {
     var menuExpanded by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -75,12 +75,22 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                                 DividerDefaults.color
                             )
 
-                            // Opción Salir
                             DropdownMenuItem(
-                                text = { Text("Salir") },
+                                text = { Text("Verificar ubicación")},
                                 onClick = {
                                     menuExpanded = false
-                                    android.os.Process.killProcess(android.os.Process.myPid())
+                                    viewModel.navigateTo(Screen.Ubicacion)
+                                }
+                            )
+
+
+
+                            // Opción Salir
+                            DropdownMenuItem(
+                                text = { Text("Cerrar Sesión") },
+                                onClick = {
+                                    menuExpanded = false
+                                    onCerrarSesion()
                                 }
                             )
                         }
@@ -132,13 +142,13 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { viewModel.navigateTo(Screen.Entrada(1)) },
+                                onClick = { viewModel.navigateTo(Screen.VerificarEntrada(1)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 1")
                             }
                             ElevatedButton(
-                                onClick = { viewModel.navigateTo(Screen.Entrada(2)) },
+                                onClick = { viewModel.navigateTo(Screen.VerificarEntrada(2)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 2")
@@ -150,13 +160,13 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             ElevatedButton(
-                                onClick = { viewModel.navigateTo(Screen.Entrada(3)) },
+                                onClick = { viewModel.navigateTo(Screen.VerificarEntrada(3)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 3")
                             }
                             ElevatedButton(
-                                onClick = { viewModel.navigateTo(Screen.Entrada(4)) },
+                                onClick = { viewModel.navigateTo(Screen.VerificarEntrada(4)) },
                                 modifier = Modifier.weight(1f)
                             ) {
                                 Text("Entrada 4")
@@ -193,5 +203,7 @@ fun HomeScreenCompacta(viewModel: MainViewModel = viewModel()) {
 @Preview(name = "Compact", widthDp = 360, heightDp = 800, showBackground = true)
 @Composable
 fun HomeScreenCompactaPreview() {
-    HomeScreenCompacta()
+    HomeScreenCompacta(
+        onCerrarSesion = {}
+    )
 }
